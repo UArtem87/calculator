@@ -28,10 +28,10 @@ const handleNumber = (number) => {
     currentNumber += number;
     display.classList.remove('error')
 
-    if (currentNumber === '.') {
+    if (currentNumber === '.' && currentNumber === '') {
       display.classList.add('error');
     }
-    s
+
   } else if (currentNumber === '0' || currentNumber === '') {
 
     if (operator === '/' && number === '0') {
@@ -179,22 +179,19 @@ keyboard.addEventListener('click', (event) => {
   updatedisplay();
 })
 
-document.addEventListener('keydown', (event) => {
+keyboard.addEventListener('keydown', (event) => {
+  const { key, code } = event;
 
-  if (event.key === ' ' || event.key === 'Enter') {
+  if (key === ' ' || key === 'Enter') {
     event.preventDefault();
   }
 
-  const key = event.key;
-  const code = event.code;
-
-
   if (!isNaN(parseInt(key)) && key !== ' ') {
+    console.log(key)
     handleNumber(key);
   }
 
-  if (key === '.' || key === ',' || code === 'NumpadDecimal') {
-    event.preventDefault();
+  if (key === '.' || code === 'NumpadDecimal') {
     handleNumber('.');
   }
 
