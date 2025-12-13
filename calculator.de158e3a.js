@@ -12,9 +12,9 @@ const handleNumber = (number)=>{
     if (currentNumber.length >= 12 && number !== '.') return;
     if (number === '.') {
         if (currentNumber.includes('.')) return;
-        currentNumber += number;
+        if (currentNumber === '' || currentNumber === '0') currentNumber = '0.';
+        else currentNumber += number;
         display.classList.remove('error');
-        if (currentNumber === '.' && currentNumber === '') display.classList.add('error');
     } else if (currentNumber === '0' || currentNumber === '') {
         if (operator === '/' && number === '0') display.classList.add('error');
         currentNumber = number;
