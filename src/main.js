@@ -19,19 +19,21 @@ const handleNumber = (number) => {
     return;
   }
 
+
+
   if (number === '.') {
 
     if (currentNumber.includes('.')) {
       return;
     }
 
-    currentNumber += number;
-    display.classList.remove('error')
-
-    if (currentNumber === '.' && currentNumber === '') {
-      display.classList.add('error');
+    if (currentNumber === '' || currentNumber === '0') {
+      currentNumber = '0.'
+    } else {
+      currentNumber += number;
     }
 
+    display.classList.remove('error');
   } else if (currentNumber === '0' || currentNumber === '') {
 
     if (operator === '/' && number === '0') {
