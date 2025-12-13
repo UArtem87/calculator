@@ -9,12 +9,12 @@ const updatedisplay = ()=>{
     if (waitingForSecondOperand) display.textContent = `${firstOperand} ${operator} ${currentNumber}`;
 };
 const handleNumber = (number)=>{
-    if (currentNumber.length >= 12 && number !== '.') return; // Не дозволяємо вводити більше
+    if (currentNumber.length >= 12 && number !== '.') return;
     if (number === '.') {
         if (currentNumber.includes('.')) return;
         currentNumber += number;
         display.classList.remove('error');
-        if (currentNumber === '.') display.classList.add('error');
+        if (currentNumber === '.' && currentNumber === '') display.classList.add('error');
     } else if (currentNumber === '0' || currentNumber === '') {
         if (operator === '/' && number === '0') display.classList.add('error');
         currentNumber = number;
@@ -47,16 +47,14 @@ const handleOperator = (nextOperator)=>{
     }
 };
 const handleBackspace = ()=>{
-    // Якщо вводимо друге число
     if (waitingForSecondOperand && currentNumber !== '') {
-        currentNumber = currentNumber.slice(0, -1); // Стерти останній символ
-        if (currentNumber === '' || currentNumber === '-') currentNumber = ''; // Залишити порожнім
+        currentNumber = currentNumber.slice(0, -1);
+        if (currentNumber === '' || currentNumber === '-') currentNumber = '';
         if (currentNumber === '0') {
             display.classList.add('error');
             return;
         }
     } else if (waitingForSecondOperand && currentNumber === '') {
-        // Скасувати оператор, повернутись до редагування першого числа
         currentNumber = firstOperand.toString();
         operator = null;
         firstOperand = null;
@@ -113,27 +111,20 @@ keyboard.addEventListener('click', (event)=>{
     if (backspace) handleBackspace();
     updatedisplay();
 });
-document.addEventListener('keydown', (event)=>{
-    // Предотвращаем прокрутку страницы при нажатии пробела
-    if (event.key === ' ' || event.key === 'Enter') event.preventDefault();
-    const key = event.key;
-    const code = event.code;
-    // 1. Обработка чисел (основной ряд и Numpad)
-    if (!isNaN(parseInt(key)) && key !== ' ') handleNumber(key);
-    if (key === '.' || key === ',' || code === 'NumpadDecimal') {
-        event.preventDefault(); // Предотвращаем ввод символа, если нужно
-        handleNumber('.'); // Вызываем handleNumber с точкой
+keyboard.addEventListener('keydown', (event)=>{
+    const { key, code } = event;
+    if (key === ' ' || key === 'Enter') event.preventDefault();
+    if (!isNaN(parseInt(key)) && key !== ' ') {
+        console.log(key);
+        handleNumber(key);
     }
-    // 2. Обработка операторов
+    if (key === '.' || code === 'NumpadDecimal') handleNumber('.');
     if (key === '+' || key === '-' || key === '*' || key === '/') handleOperator(key);
-    // 3. Обработка действий (Enter, Backspace, Clear)
     if (key === 'Enter' || key === '=') {
         calculate();
-        // ВАЖНО: оператор = null вы сбрасываете в handleOperator, но при нажатии "=" его нужно сбросить явно
         operator = null;
     } else if (key === 'Backspace') handleBackspace();
     else if (key === 'Delete') reset();
-    // 4. Обновление дисплея после обработки клавиатуры
     updatedisplay();
 });
 
