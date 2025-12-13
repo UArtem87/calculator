@@ -1,0 +1,19 @@
+{
+  "name": "calculator",
+  "version": "1.0.0",
+  "homepage": "https://UArtem87.github.io/calculator",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html --public-url ./",
+    "deploy": "gh-pages -d dist"
+  },
+  "keywords": [],
+  "author": "UArtem87",
+  "license": "ISC",
+  "description": "Simple calculator",
+  "devDependencies": {
+    "gh-pages": "^6.3.0",
+    "parcel": "^2.16.3"
+  }
+}
